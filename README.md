@@ -10,7 +10,7 @@ Not working yet, this is only a skeleton for now.
   
 ### How to use:
 `git clone https://github.com/Konijima/IPFS-NodeJS-Blockchain.git`  
-`cd NodeJS-Blockchain`  
+`cd IPFS-NodeJS-Blockchain`  
 `npm install`  
 `node src/main.js`  
   
