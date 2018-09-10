@@ -1,0 +1,28 @@
+{
+  "name": "ipfs-nodejs-blockchain",
+  "version": "1.0.0",
+  "description": "Demo Blockchain made on NodeJS",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Konijima/IPFS-NodeJS-Blockchain.git"
+  },
+  "keywords": [
+    "Demo",
+    "IPFS",
+    "Blockchain",
+    "NodeJS"
+  ],
+  "author": "Konijima",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Konijima/IPFS-NodeJS-Blockchain/issues"
+  },
+  "homepage": "https://github.com/Konijima/IPFS-NodeJS-Blockchain#readme",
+  "dependencies": {
+    "ipfs": "^0.31.7"
+  }
+}
