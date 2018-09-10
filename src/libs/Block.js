@@ -1,7 +1,7 @@
 // 2018, Konijima
 'use strict'
 
-const crypto = require('crypto')
+const Utils = require('./Utils')
 
 /**
  *  Block
@@ -17,12 +17,9 @@ class Block {
     this.hash = this.calculateHash()
   }
 
-  calculateHash() {
-    return crypto.createHash('sha256').update(this.height + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce).digest("hex")
-  }
-  
-  validateBlock(previousBlock) {
-    
+  calculateHash(nonce) {
+    if (nonce >= 0) this.nonce = nonce
+    return Utils.sha256(this.height + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce)
   }
 
 }
