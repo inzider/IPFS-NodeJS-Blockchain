@@ -43,7 +43,9 @@ nodeP2P.on('start', () => {
   var timestamp = Date.now()
   var data = {
     txs: [
-      new Transaction('nowallet', walletSystem.loadedWallet.publicKey, 123456, Date.now() - 300)
+      new Transaction('nowallet', walletSystem.loadedWallet.publicKey, 10000, Date.now() - 300),
+      new Transaction(walletSystem.loadedWallet.publicKey, 'nowallet', 10000, Date.now() - 200),
+      new Transaction('nowallet', walletSystem.loadedWallet.publicKey, 10000, Date.now() - 100)
     ]
   }
   var testBlock = new Block(height, timestamp, data)

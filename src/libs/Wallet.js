@@ -56,25 +56,40 @@ class Wallet extends EventEmitter {
   }
 
   getBalance() {
-
+    if (this.loadedWallet)
+      return this.getAddressBalance(this.loadedWallet.publicKey)
   }
 
   getAddressBalance(addressPublicKey) {
     var balance = 0
+    var relatedTxs = []
     var chain = this.blockchain.chain
+
     for (var x = 0; x < chain.length; x++) {
       var parsed = JSON.parse(chain[x].data)
       if (parsed.txs.length >= 0) {
-        for (var y = 0; y < parsed.txs.length; y++) {
-          if (parsed.txs[y].to === addressPublicKey) {
-            balance += parsed.txs[y].amount
-          }
-          else if (parsed.txs[y].from === addressPublicKey) {
-            balance -= parsed.txs[y].amount
+        for (var y in parsed.txs) {
+          if (parsed.txs[y].to === addressPublicKey || parsed.txs[y].from === addressPublicKey) {
+            relatedTxs.push(parsed.txs[y])
           }
         }
       }
     }
+
+    // Sort by timestamp
+    var orderTxs = relatedTxs.sort(function(a, b) {
+      return a.timestamp - b.timestamp;
+    });
+    for (var i in orderTxs) {
+      var tx = orderTxs[i]
+      if (tx.to === addressPublicKey) {
+        balance += tx.amount
+      }
+      else if (tx.from === addressPublicKey) {
+        balance -= tx.amount
+      }
+    }
+
     return balance.toFixed(4)
   }
 
