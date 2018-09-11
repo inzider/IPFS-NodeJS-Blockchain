@@ -23,8 +23,14 @@ blockchain.on('initialized', () => {
 nodeP2P.on('start', () => {
   logger.info('p2p node has been initialized!')
 
-  /* Wallet Testing */
-  if (!walletSystem.load('default.wallet', '')) {
+  TEST()
+})
+
+
+
+/* Wallet Testing */
+function TEST() {
+  if (!walletSystem.load('default.wallet', '')) { // Wallet not found, creating new one
     var defaultWalletContainer = Wallet.generateWallet()
     walletSystem.loadedWallet = defaultWalletContainer
     var encrypted = Utils.encryptWithPassword(JSON.stringify(defaultWalletContainer), '')
@@ -34,7 +40,7 @@ nodeP2P.on('start', () => {
       encrypted = null
     })
   }
-  else {
+  else { // Wallet found and loaded
     logger.info(`Wallet '${walletSystem.loadedWallet.publicKey}' has been loaded!`)
   }
 
@@ -51,13 +57,12 @@ nodeP2P.on('start', () => {
   var testBlock = new Block(height, timestamp, data)
   blockchain.createNextBlock(testBlock)
 
-
   logger.debug('----------------------------------------------------------------------')
   logger.debug(`Loaded Wallet: ${JSON.stringify(walletSystem.loadedWallet)}`)
   logger.debug('----------------------------------------------------------------------')
   logger.debug(`Last block: ${JSON.stringify(blockchain.getLastBlock())}`)
   logger.debug('----------------------------------------------------------------------')
   logger.debug(`Wallet Public Address: ${walletSystem.loadedWallet.publicKey}`)
-  logger.debug(`Balance: ${walletSystem.getAddressBalance(walletSystem.loadedWallet.publicKey)}`)
+  logger.debug(`Balance: ${walletSystem.getBalance()}`)
   logger.debug('----------------------------------------------------------------------')
-})
+}
