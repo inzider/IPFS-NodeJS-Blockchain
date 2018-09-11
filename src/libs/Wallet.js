@@ -1,9 +1,11 @@
 // 2018, Konijima
 'use strict'
 
+const fs = require('fs')
 const EventEmitter = require('events').EventEmitter
 const Utils = require('./Utils')
 const Logger = require('./Logger')
+const WalletContainer = require('./WalletContainer')
 
 /**
  *  Wallet
@@ -22,24 +24,48 @@ class Wallet extends EventEmitter {
     if (pipes.blockchain) this.blockchain = pipes.blockchain
   }
 
-  load() {
-
+  load(walletFilename, password) {
+    try {
+      var fileData = Utils.loadFile(walletFilename)
+      var decrypted = Utils.decryptWithPassword(fileData, password)
+      decrypted = JSON.parse(decrypted)
+      if (Utils.isObject(decrypted)) {
+        this.loadedWallet = new WalletContainer(decrypted)
+        decrypted = null
+        this.logger.trace(`Wallet '${walletFilename}' has loaded!`)
+        return true
+      }
+    }
+    catch (e) {
+      return false
+    }
   }
 
   save() {
+    if (this.loadedWallet instanceof WalletContainer) {
+
+    }
+    else this.logger.error('Cannot save without an active wallet!')
+  }
+
+  reset() {
 
   }
 
   send(to, amount) {
-    if (!this.loadedWallet) throw Error("Trying to send coin with no wallet loaded!")
+
   }
 
   getBalance() {
-    if (!this.loadedWallet) throw Error("Trying to get balance with no wallet loaded!")
+
+  }
+
+  getAddressBalance(addressPublicKey) {
+
   }
 
   static generateWallet() {
-    return Utils.keyPair(256)
+    return new WalletContainer(Utils.keyPair(256))
   }
 
 }
