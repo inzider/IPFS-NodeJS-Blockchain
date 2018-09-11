@@ -6,6 +6,7 @@ const Utils = require('./libs/Utils')
 const Block = require('./libs/Block')
 const NodeP2P = require('./libs/NodeP2P')
 const Blockchain = require('./libs/Blockchain')
+const Transaction = require('./libs/Transaction')
 const Wallet = require('./libs/Wallet')
 const WalletContainer = require('./libs/WalletContainer')
 const Logger = require('./libs/Logger')
@@ -22,6 +23,7 @@ blockchain.on('initialized', () => {
 nodeP2P.on('start', () => {
   logger.info('p2p node has been initialized!')
 
+  /* Wallet Testing */
   if (!walletSystem.load('default.wallet', '')) {
     var defaultWalletContainer = Wallet.generateWallet()
     walletSystem.loadedWallet = defaultWalletContainer
@@ -30,9 +32,30 @@ nodeP2P.on('start', () => {
       logger.info('Default Wallet saved successfully!')
       defaultWalletContainer = null
       encrypted = null
-
-      console.log(walletSystem.loadedWallet)
     })
   }
-  else console.log(walletSystem.loadedWallet)
+  else {
+    logger.info(`Wallet '${walletSystem.loadedWallet.publicKey}' has been loaded!`)
+  }
+
+  /* New Block Testing */
+  var height = 1
+  var timestamp = Date.now()
+  var data = {
+    txs: [
+      new Transaction('nowallet', walletSystem.loadedWallet.publicKey, 123456, Date.now() - 300)
+    ]
+  }
+  var testBlock = new Block(height, timestamp, data)
+  blockchain.createNextBlock(testBlock)
+
+
+  logger.debug('----------------------------------------------------------------------')
+  logger.debug(`Loaded Wallet: ${JSON.stringify(walletSystem.loadedWallet)}`)
+  logger.debug('----------------------------------------------------------------------')
+  logger.debug(`Last block: ${JSON.stringify(blockchain.getLastBlock())}`)
+  logger.debug('----------------------------------------------------------------------')
+  logger.debug(`Wallet Public Address: ${walletSystem.loadedWallet.publicKey}`)
+  logger.debug(`Balance: ${walletSystem.getAddressBalance(walletSystem.loadedWallet.publicKey)}`)
+  logger.debug('----------------------------------------------------------------------')
 })

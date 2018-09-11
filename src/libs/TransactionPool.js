@@ -1,6 +1,8 @@
 // 2018, Konijima
 'use strict'
 
+const Transaction = require('./Transaction')
+
 /**
  *  TransactionPool
  */
@@ -11,7 +13,10 @@ class TransactionPool {
   }
 
   addTransaction(transaction) {
-    this.pool.push(transaction)
+    if (transaction instanceof Transaction) {
+      this.pool.push(transaction)
+    }
+    else throw Error('Must be a Transaction object')
   }
 
 }

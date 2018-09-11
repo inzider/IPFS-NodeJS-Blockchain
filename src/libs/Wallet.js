@@ -32,7 +32,6 @@ class Wallet extends EventEmitter {
       if (Utils.isObject(decrypted)) {
         this.loadedWallet = new WalletContainer(decrypted)
         decrypted = null
-        this.logger.trace(`Wallet '${walletFilename}' has loaded!`)
         return true
       }
     }
@@ -61,7 +60,22 @@ class Wallet extends EventEmitter {
   }
 
   getAddressBalance(addressPublicKey) {
-
+    var balance = 0
+    var chain = this.blockchain.chain
+    for (var x = 0; x < chain.length; x++) {
+      var parsed = JSON.parse(chain[x].data)
+      if (parsed.txs.length >= 0) {
+        for (var y = 0; y < parsed.txs.length; y++) {
+          if (parsed.txs[y].to === addressPublicKey) {
+            balance += parsed.txs[y].amount
+          }
+          else if (parsed.txs[y].from === addressPublicKey) {
+            balance -= parsed.txs[y].amount
+          }
+        }
+      }
+    }
+    return balance.toFixed(4)
   }
 
   static generateWallet() {

@@ -24,7 +24,7 @@ class Blockchain extends EventEmitter {
   }
 
   createGenesisBlock() {
-    return new Block(0, Date.now() , "Genesis Block")
+    return new Block(0, 0, {txs:[new Transaction('44e6aba78545a7b771e48eab6745303f02177911e9b0d86e2d83b971cfe9f748', 'Genesis Block', 100000000, 0)]})
   }
 
   createNextBlock(newBlock) {

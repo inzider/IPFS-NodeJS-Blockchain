@@ -13,11 +13,6 @@ class Transaction {
     this.from = from
     this.amount = amount
     this.timestamp = timestamp
-    this.hash = this.calculateHash()
-  }
-
-  calculateHash() {
-    return Utils.sha256(this.to + this.from + this.amount + this.timestamp)
   }
 
 }

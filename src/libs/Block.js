@@ -11,7 +11,7 @@ class Block {
   constructor(height, timestamp, data) {
     this.height = height
     this.timestamp = timestamp
-    this.data = data
+    this.data = JSON.stringify(data)
     this.previousHash = 0
     this.nonce = 0
     this.hash = this.calculateHash()
